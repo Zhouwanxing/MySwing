@@ -39,8 +39,8 @@ public class LoginFrame extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = userText.getText();
-                String password = new String(passwordText.getPassword());
+                String username = userText.getText().trim();
+                String password = new String(passwordText.getPassword()).trim();
                 if ("admin".equals(username) && "1234".equals(password)) {
                     dispose();
                     new MainFrame();
