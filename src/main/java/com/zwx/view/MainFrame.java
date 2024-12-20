@@ -1,12 +1,13 @@
 package com.zwx.view;
 
 import com.zwx.mqtt.MQTTClient;
+import com.zwx.utils.RuntimeData;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame {
-    private JTextArea dataDisplay;
+    private final JTextArea dataDisplay;
 
     public MainFrame() {
         setTitle("主界面");
@@ -29,7 +30,7 @@ public class MainFrame extends JFrame {
         add(mainPanel);
         setVisible(true);
 
-        MQTTClient.connect("tcp://broker.emqx.io:1883", "testTopic", this);
+        MQTTClient.connect(RuntimeData.getInstance().getSwingConfig().getBroker(), RuntimeData.getInstance().getSwingConfig().getTopic(), this);
     }
 
     public void updateData(String message) {

@@ -1,8 +1,12 @@
 package com.zwx.view;
 
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.zwx.entity.SwingConfig;
+import com.zwx.utils.RuntimeData;
+
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
@@ -36,17 +40,26 @@ public class LoginFrame extends JFrame {
         loginButton.setBounds(150, 110, 80, 25);
         panel.add(loginButton);
 
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String username = userText.getText().trim();
-                String password = new String(passwordText.getPassword()).trim();
-                if ("admin".equals(username) && "1234".equals(password)) {
-                    dispose();
-                    new MainFrame();
-                } else {
-                    JOptionPane.showMessageDialog(panel, "用户名或密码错误！", "1", JOptionPane.INFORMATION_MESSAGE);
+        loginButton.addActionListener(e -> {
+            String username = userText.getText().trim();
+            String password = new String(passwordText.getPassword()).trim();
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(panel, "请输入用户名或密码", "提醒", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            try {
+                String s = HttpUtil.get("https://goldtask.onrender.com/page/user/login?username=" + username + "&password=" + password + "&dev=swing");
+                JSONObject res = JSONUtil.parseObj(s);
+                if (res.getInt("code") != 200) {
+                    JOptionPane.showMessageDialog(panel, "用户名或密码错误！", "提醒", JOptionPane.INFORMATION_MESSAGE);
+                    return;
                 }
+                RuntimeData.getInstance().setSwingConfig(res.getJSONObject("data").get("swingConfig", SwingConfig.class));
+                dispose();
+                new MainFrame();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(panel, "网络异常", "1", JOptionPane.INFORMATION_MESSAGE);
             }
         });
         setVisible(true);
