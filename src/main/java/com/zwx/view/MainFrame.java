@@ -11,6 +11,10 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         setTitle("主界面");
+        Image icon = Toolkit.getDefaultToolkit().getImage(
+                getClass().getResource("/images/jerry.png")
+        );
+        setIconImage(icon);
         setSize(500, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

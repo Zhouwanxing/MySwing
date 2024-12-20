@@ -7,10 +7,15 @@ import com.zwx.entity.SwingConfig;
 import com.zwx.utils.RuntimeData;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class LoginFrame extends JFrame {
     public LoginFrame() {
         setTitle("登录窗口");
+        Image icon = Toolkit.getDefaultToolkit().getImage(
+                getClass().getResource("/images/jerry.png")
+        );
+        setIconImage(icon);
         setSize(400, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
